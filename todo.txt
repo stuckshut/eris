@@ -1,0 +1,27 @@
+1. @eris remindme <thing> <date>
+2. @eris uptime
+3. temporary channel creation/deletion
+3. Admin commands
+    1. setrole/removerole
+    2. create/delete role
+    3. ban/unban
+    4. kick user
+    5. sets channel topic
+    7. show userid and channelid
+    8. prune messages - a given number, or all from a user
+    9. .restart - restart the bot
+    10. .die - kill the bot
+    11. .join - join a server
+    12. .leave - leave a server
+    13. .sls - list connected servers
+4. save an item/file - @eris save <thing> <data/file>, @eris ls (shows that user's saves), @eris get <thing>
+5. request system - @eris req <thing>
+6. Games!
+    - Blackjack
+    - Poker
+    - RPGish (attacks, hp, levels, etc.)
+7. Music, maybe
+8. searches
+    - google
+    - youtube
+    - memes
