@@ -25,3 +25,4 @@
     - google
     - youtube
     - memes
+9. Sorting - numbers, strings, etc. (also bogosort)
