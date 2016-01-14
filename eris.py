@@ -34,7 +34,10 @@ def on_message(message):
             client.send_message(message.channel, send_help())
         # Dice
         elif message.content.startswith('!roll'):
-            client.send_message(message.channel, roll(message.content[5:]))
+            if message.content[5:]:
+                client.send_message(message.channel, roll(message.content[5:]))
+            else:
+                client.send_message(message.channel, roll('1d6'))
 
 
 def send_help():
