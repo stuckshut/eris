@@ -1,6 +1,7 @@
 import discord
-import dice
 import settings
+
+from actions import commands
 
 client = discord.Client()
 client.login(settings.USER, settings.PASS)
@@ -16,42 +17,68 @@ def on_ready():
 
 @client.event
 def on_message(message):
-    """
+    """Handler for messages that are transmitted in channels on the server
 
     Args:
         message: A received message object
 
     Returns:
-        none
-
+        None
     """
     if message.author.id != client.user.id:
-        # Echo
-        if message.content.startswith('!echo'):
-            client.send_message(message.channel, message.content[5:])
-        # Help
-        elif message.content.startswith('!help'):
-            client.send_message(message.channel, send_help())
-        # Dice
-        elif message.content.startswith('!roll'):
-            if message.content[5:]:
-                client.send_message(message.channel, roll(message.content[5:]))
-            else:
-                client.send_message(message.channel, roll('1d6'))
+        command = commands.get_command_from_list(message)
+        if command:
+            command = command[0](message)
+
+            if command.channel_required and is_direct_message(message):
+                # Don't allow Eris to be killed by direct message.
+                client.send_message(
+                    message.channel,
+                    settings.CHANNEL_REQUIRED_MSG
+                )
+                return
+
+            if command.admin_required and not message_is_from_admin(message):
+                client.send_message(message.channel, settings.UNAUTHORIZED_MSG)
+                return
+
+            client.send_message(message.channel, command.execute())
 
 
-def send_help():
-    msg = "Commands:\n" \
-          "!help - show this message\n" \
-          "!echo - Echo chamber\n" \
-          "!roll - Roll dice: !roll 3d6\n"
-    return msg
+def message_is_from_admin(message):
+    """Determine whether the received message is from an admin.
+
+    A message is considered sent by an admin if the message.author is of type
+    Member and message.author.roles contains the settings.ADMIN_ROLE.
+
+    Args:
+        message: A received message object
+
+    Returns:
+        bool: True when the message was sent by an admin. False when it wasn't.
+    """
+    if [r.name for r in message.author.roles if r.name == settings.ADMIN_ROLE]:
+        return True
+    return False
 
 
-def roll(message):
-    result = dice.roll(message)
-    return result
+def is_direct_message(message):
+    """Determine whether the received message was a direct message to Eris.
 
+    A message is considered a direct message when the message.author is of type
+    User.
+
+    It is useful to know whether a message was a direct message so we know
+    whether or not we can inspect message.author.roles.
+
+    Args:
+        message: A received message object
+
+    Returns:
+        True if the message was a direct message. False if it was not.
+    """
+    # If message.author is of type User, this was a direct message.
+    return type(message.author) == discord.User
 
 if __name__ == '__main__':
     client.run()
