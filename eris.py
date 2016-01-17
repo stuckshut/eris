@@ -1,10 +1,10 @@
 import discord
+import logging
 import settings
-
 from actions import commands
 
+
 client = discord.Client()
-client.login(settings.USER, settings.PASS)
 
 
 @client.event
@@ -78,7 +78,9 @@ def is_direct_message(message):
         True if the message was a direct message. False if it was not.
     """
     # If message.author is of type User, this was a direct message.
-    return type(message.author) == discord.User
+    return isinstance(message.author, discord.User)
 
 if __name__ == '__main__':
+    client.login(settings.USER, settings.PASS)
+    logging.basicConfig(level=logging.INFO)
     client.run()

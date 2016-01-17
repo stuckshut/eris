@@ -2,3 +2,4 @@ settingslocal.py
 __pycache__
 *.pyc
 .idea/*
+.coverage
