@@ -33,7 +33,7 @@ class Command:
         return self.help_message
 
     def __repr__(self):
-        return self.help_message
+        return "Command(command={0}, message={1}".format(self.command, self.message)
 
     def execute(self):
         """The main execution method for Command types
@@ -43,7 +43,7 @@ class Command:
         Returns:
             string
         """
-        pass
+        raise NotImplementedError()
 
 
 def get_command_from_message(message):
@@ -154,4 +154,5 @@ def get_command_from_list(message):
     """
     command_string = get_command_from_message(message)
     command = [c for c in command_list if c.command == command_string]
-    return command
+
+    return command[0] if command else None

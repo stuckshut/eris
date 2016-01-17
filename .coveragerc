@@ -1,0 +1,12 @@
+[run]
+include = ./*
+omit = */tests/*
+       */__init__.py
+       settings.py
+       settingslocal.py
+
+[report]
+exclude_lines =
+    if __name__ == '__main__':
+    raise NotImplementedError()
+show_missing = True
