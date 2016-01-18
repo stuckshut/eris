@@ -37,11 +37,28 @@ def on_message(message):
                 )
                 return
 
-            if command.admin_required and not message_is_from_admin(message):
+            if command.admin_required and not message_is_from_admin(message) and not message_is_from_server_owner(message):
                 client.send_message(message.channel, settings.UNAUTHORIZED_MSG)
                 return
 
-            client.send_message(message.channel, command.execute())
+            val = command.execute()
+            if isinstance(val, str):
+                client.send_message(message.channel, val)
+
+
+def message_is_from_server_owner(message):
+    """Determine whether the message was sent by the server owner
+
+    Args:
+        message: A received message object
+
+    Returns:
+        bool: True if sent by the server owner, False otherwise
+
+    """
+    if message.author.id == message.server.owner:
+        return True
+    return False
 
 
 def message_is_from_admin(message):

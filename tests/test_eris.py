@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 
 import eris
 
+
 class ErisTest(TestCase):
     """Tests the eris.py module"""
 
@@ -48,13 +49,23 @@ class ErisTest(TestCase):
 
     @patch("eris.message_is_from_admin", MagicMock(return_value=True))
     @patch("eris.is_direct_message", MagicMock(return_value=False))
-    @patch("eris.commands.HelpCommand.execute", MagicMock())
+    @patch("eris.commands.HelpCommand.execute", MagicMock(return_value="help message!"))
     @patch("eris.client.send_message", MagicMock())
     def test_on_message_execute_message(self):
         self.message.content = "!help"
 
         eris.on_message(self.message)
         eris.client.send_message.assert_called_once_with(self.message.channel, eris.commands.HelpCommand.execute())
+
+    def test_message_is_from_owner(self):
+        message = MagicMock()
+
+        message.author.id = 10
+        message.server.owner = 10
+        self.assertTrue(eris.message_is_from_server_owner(message))
+
+        message.server.owner = 20
+        self.assertFalse(eris.message_is_from_server_owner(message))
 
     def test_message_is_from_admin(self):
         role = MagicMock()
