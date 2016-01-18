@@ -28,7 +28,7 @@ def on_message(message):
     if message.author.id != client.user.id:
         command = commands.get_command_from_list(message)
         if command:
-            command = command(message)
+            command = command(client, message)
             if command.channel_required and is_direct_message(message):
                 # Don't allow Eris to be killed by direct message.
                 client.send_message(
@@ -78,6 +78,7 @@ def is_direct_message(message):
     """
     # If message.channel is a PrivateChannel, then it's a direct message
     return isinstance(message.channel, discord.PrivateChannel)
+
 
 if __name__ == '__main__':
     client.login(settings.USER, settings.PASS)
