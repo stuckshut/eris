@@ -20,10 +20,12 @@ class Command:
     admin_required = False
     channel_required = False
 
-    def __init__(self, message):
+    def __init__(self, client, message):
+        self.client = client
         self.message = message
         parts = message.content.split(' ', 1)
         self.command = parts[0]
+        # TODO : make this separate into multiple args for multi-part commands
         if len(parts) > 1:
             self.args = parts[1]
         else:
@@ -44,18 +46,6 @@ class Command:
             string
         """
         raise NotImplementedError()
-
-
-def get_command_from_message(message):
-    """Parse the command from a Discord message
-
-    Args:
-        message: The received Discord message
-
-    Returns:
-        string: The parsed command
-    """
-    return message.content.split(' ', 1)[0]
 
 
 class HelpCommand(Command):
@@ -135,12 +125,17 @@ class KillCommand(Command):
     def execute(self):
         quit()
 
-command_list = [
-    HelpCommand,
-    EchoCommand,
-    RollCommand,
-    KillCommand
-]
+
+def get_command_from_message(message):
+    """Parse the command from a Discord message
+
+    Args:
+        message: The received Discord message
+
+    Returns:
+        string: The parsed command
+    """
+    return message.content.split(' ', 1)[0]
 
 
 def get_command_from_list(message):
@@ -156,3 +151,6 @@ def get_command_from_list(message):
     command = [c for c in command_list if c.command == command_string]
 
     return command[0] if command else None
+
+
+command_list = [HelpCommand, EchoCommand, RollCommand, KillCommand]
