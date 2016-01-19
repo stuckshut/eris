@@ -13,11 +13,11 @@ class ErisTest(TestCase):
         eris.client = MagicMock()
         eris.client.user.id = 20
 
-    @patch("eris.print", MagicMock())
-    def test_on_ready(self):
+    @patch("eris.print")
+    def test_on_ready(self, mock_print):
         # Nothing really happens here...
         eris.on_ready()
-        self.assertTrue(eris.print.called)
+        self.assertTrue(mock_print.called)
 
     @patch("eris.commands.get_command_from_list", MagicMock())
     def test_on_message_self_message(self):

@@ -1,4 +1,5 @@
 [run]
+branch = true
 include = ./*
 omit = */tests/*
        */__init__.py

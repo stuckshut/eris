@@ -1,0 +1,22 @@
+# Language
+language: python
+
+# Versions
+python:
+    - "3.4"
+
+# Path for coverage to set its .coverage file
+env:
+    - COVERAGE_FILE=shippable/testresults/.coverage
+
+# setup test directories
+before_script:
+    - mkdir -p shippable/testresults
+    - mkdir -p shippable/codecoverage
+    - pip install -r requirements_dev.txt
+
+script:
+    - coverage run -m nose2 -X --plugin nose2.plugins.junitxml
+
+after_script:
+    - coverage xml -o shippable/codecoverage/coverage.xml
