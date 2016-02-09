@@ -13,7 +13,7 @@ class ErisTest(TestCase):
         eris.client = MagicMock()
         eris.client.user.id = 20
 
-    @patch("eris.print")
+    @patch("builtins.print", autospec=True)
     def test_on_ready(self, mock_print):
         # Nothing really happens here...
         eris.on_ready()
