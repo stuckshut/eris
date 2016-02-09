@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 
 import actions.admin_commands
 
@@ -26,7 +26,7 @@ class JoinServerCommand(TestCase):
         client.accept_invite.side_effect = actions.HTTPException(MagicMock())
         message.content = '.join http://null.null/123123123'
         join_cmd = actions.admin_commands.JoinServerCommand(client, message)
-        self.assertEqual(join_cmd.execute(), 'I couldn\'t accept that request for some reason')
+        self.assertEqual(join_cmd.execute(), "I couldn't accept that request for some reason")
 
         # Invalid arg
         client.accept_invite.side_effect = actions.InvalidArgument()
